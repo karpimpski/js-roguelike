@@ -1,5 +1,6 @@
 export default {
-  tileSize: 10,
-  mapWidth: 60,
-  mapHeight: 40
+  tileSize: 12,
+  mapWidth: 50,
+  mapHeight: 35,
+  font: '12pt Calibri'
 }
