@@ -1,6 +1,5 @@
 import config from '../config.js'
-import Tile from './tile.js'
-import Character from './character.js'
+import Tile from './Tile.js'
 
 export default class {
   constructor(game) {
