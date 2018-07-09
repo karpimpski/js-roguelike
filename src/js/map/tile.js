@@ -1,9 +1,5 @@
-import config from '../config.js'
-
 export default class {
-  constructor(x, y, color, passable = true) {
-    this.x = x * config.tileSize
-    this.y = y * config.tileSize
+  constructor(color, passable = true) {
     this.color = color
     this.passable = passable
   }

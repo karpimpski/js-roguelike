@@ -41,9 +41,9 @@ class Game {
   }
 
   movePlayer(dx, dy) {
+    if (!this.gameMap.passableTile(this.player.char.x + dx, this.player.char.y + dy)) return
     this.player.move(dx, dy)
     this.gameMap.update()
-    // console.log(this.gameMap.findTile(this.player.char.x + dx * config.tileSize, this.player.char.y + dy * config.tileSize))
   }
 }
 

@@ -4,12 +4,12 @@ export default class {
   constructor(icon, color, x, y) {
     this.icon = icon
     this.color = color
-    this.x = x * config.tileSize
-    this.y = y * config.tileSize + config.tileSize
+    this.x = x
+    this.y = y
   }
 
   move(dx, dy) {
-    this.x += dx * config.tileSize
-    this.y += dy * config.tileSize
+    this.x += dx
+    this.y += dy
   }
 }
