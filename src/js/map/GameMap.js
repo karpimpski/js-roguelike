@@ -16,11 +16,10 @@ export default class {
       }
     }
 
-    this.createWall(20, 20, 22, 20)
-    this.createWall(24, 20, 26, 20)
-    this.createWall(20, 20, 20, 25)
-    this.createWall(26, 20, 26, 25)
-    this.createWall(26, 25, 20, 25)
+    this.createRoom(20, 13, -10, 10)
+    this.tiles[20][17] = new Tile('green')
+
+    this.createWall(0, 0, 10, 0)
   }
 
   
@@ -35,6 +34,8 @@ export default class {
   }
 
   passableTile(x, y) {
+    if (!this.tiles[x]) return
+    else if(!this.tiles[x][y]) return
     return this.tiles[x][y].passable
   }
 
@@ -44,29 +45,41 @@ export default class {
   }
 
   /**
-   * Create a straight, impassable wall.
+   * Create a straight, impassable wall. Either width or height must be 0.
    * 
    * @param {int} x initial X value
    * @param {int} y initial Y value
-   * @param {int} finalX final X value
-   * @param {int} finalY final Y value
    */
-  createWall(x, y, finalX, finalY) {
-    // if coordinates given don't represent a straight line, return
-    if (x !== finalX && y !== finalY) {
+  createWall(x, y, width, height) {
+    // if width and height are both defined, return
+    if (width !== 0 && height !== 0) {
       console.log('Error: wall must be straight')
       return
     }
 
+    const direction = width > 0 || height > 0 ?  1 : -1
     this.tiles[x][y] = new Tile('gray', false)
 
-    while (x !== finalX || y !== finalY) {
-      if (finalX < x) x -= 1
-      else if (finalX > x) x += 1
-      else if (finalY < y) y -= 1
-      else if (finalY > y) y += 1
+    for (let i = 1; i < Math.abs(width) || i < Math.abs(height); i++) {
+      width !== 0 ? x += direction : y += direction
       this.tiles[x][y] = new Tile('gray', false)
     }
+  }
+
+  createRoom(x, y, width, height) {
+    // if is defined as less than 1x1, return
+    if (Math.abs(width) === 0 || Math.abs(height) === 0) {
+      console.log("Error: Room must be at least 1x1")
+      return
+    }
+
+    const heightOffset = height > 0 ? -1 : 1
+    const widthOffset = width > 0 ? -1 : 1
+
+    this.createWall(x, y, width, 0)
+    this.createWall(x, y, 0, height)
+    this.createWall(x, y + height + heightOffset, width, 0)
+    this.createWall(x + width + widthOffset, y, 0, height)
   }
 
   addChar(char) {
