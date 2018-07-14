@@ -1,9 +1,6 @@
-import config from '../config.js'
-
 export default class {
-  constructor(icon, color, x, y) {
-    this.icon = icon
-    this.color = color
+  constructor(img, x, y) {
+    this.img = img
     this.x = x
     this.y = y
   }

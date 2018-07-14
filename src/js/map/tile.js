@@ -1,6 +1,6 @@
 export default class {
-  constructor(color, passable = true) {
-    this.color = color
+  constructor(img, passable = true) {
+    this.img = img
     this.passable = passable
   }
 }

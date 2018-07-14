@@ -2,14 +2,16 @@ import GameMap from './map/GameMap.js'
 import MapCharacter from './map/MapCharacter.js'
 import config from './config.js'
 import Player from './Player.js'
+import Images from './Images.js'
 
 class Game {
   constructor() {
     this.canvas = this.initCanvas()
     this.ctx = this.canvas.getContext('2d')
+    this.images = new Images()
     this.gameMap = new GameMap(this)
     this.setListeners()
-    this.player = new Player(new MapCharacter('@', 'white', 24, 17))
+    this.player = new Player(new MapCharacter(this.images.getImage('player'), 24, 17))
     this.gameMap.addChar(this.player.char)
   }
 

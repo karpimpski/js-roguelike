@@ -1,5 +1,6 @@
 import config from '../config.js'
 import Tile from './Tile.js'
+import Images from '../Images.js'
 
 /**
  * Represents the game map.
@@ -7,6 +8,7 @@ import Tile from './Tile.js'
 export default class GameMap {
   constructor(game) {
     this.game = game
+    this.images = new Images()
     this.tiles = []
     this.characters = []
     this.setupMap()
@@ -32,12 +34,12 @@ export default class GameMap {
     for (let x = 0; x < config.mapWidth; x++) {
       this.tiles.push([])
       for (let y = 0; y < config.mapHeight; y++) {
-        this.tiles[x].push(new Tile('green'))
+        this.tiles[x].push(new Tile(this.images.getImage('grass')))
       }
     }
 
     this.createRoom(20, 13, -10, 10)
-    this.tiles[20][17] = new Tile('green')
+    this.tiles[20][17] = new Tile(this.images.getImage('grass'))
 
     this.createWall(0, 0, 10, 0)
   }
@@ -55,18 +57,6 @@ export default class GameMap {
   }
 
   /**
-   * Draws a tile on the map.
-   * 
-   * @param {Tile} tile - Tile object to draw.
-   * @param {int}    x  - X coordinate. 
-   * @param {int}    y  - Y coordinate.
-   */
-  drawTile(tile, x, y) {
-    this.game.ctx.fillStyle = tile.color
-    this.game.ctx.fillRect(x * config.tileSize, y * config.tileSize, config.tileSize, config.tileSize)
-  }
-
-  /**
    * Creates a vertical or horizontal impassable wall. Either width or height must be 0.
    * 
    * @param {int} x - Initial X value.
@@ -80,11 +70,11 @@ export default class GameMap {
     }
 
     const direction = width > 0 || height > 0 ?  1 : -1
-    this.tiles[x][y] = new Tile('gray', false)
+    this.tiles[x][y] = new Tile(this.images.getImage('wall'), false)
 
     for (let i = 1; i < Math.abs(width) || i < Math.abs(height); i++) {
       width !== 0 ? x += direction : y += direction
-      this.tiles[x][y] = new Tile('gray', false)
+      this.tiles[x][y] = new Tile(this.images.getImage('wall'), false)
     }
   }
 
@@ -123,13 +113,22 @@ export default class GameMap {
   }
 
   /**
+   * Draws a tile on the map.
+   * 
+   * @param {Tile} tile - Tile object to draw.
+   * @param {int}    x  - X coordinate. 
+   * @param {int}    y  - Y coordinate.
+   */
+  drawTile(tile, x, y) {
+    this.game.ctx.drawImage(tile.img, x * config.tileSize, y * config.tileSize)
+  }
+
+  /**
    * Draws a map character on map.
    * 
    * @param {MapCharacter} char - Character to draw.
    */
   drawChar(char) {
-    this.game.ctx.font = config.font
-    this.game.ctx.fillStyle = char.color
-    this.game.ctx.fillText(char.icon, char.x * config.tileSize, char.y * config.tileSize + config.tileSize)
+    this.game.ctx.drawImage(char.img, char.x * config.tileSize, char.y * config.tileSize, config.tileSize, config.tileSize)
   }
 }
