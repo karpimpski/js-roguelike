@@ -41,6 +41,34 @@ class Game {
       if (code === 97)                 this.movePlayer(-1, 1) // down-left
       if (code === 99)                 this.movePlayer(1, 1) // down-right
     })
+
+    document.addEventListener('mousedown', (e) => {
+      const pos = this.getMousePos(e)
+      const xDiff = this.player.char.x * config.tileSize - pos.x
+      const yDiff = this.player.char.y * config.tileSize - pos.y
+
+      if(Math.abs(xDiff) + Math.abs(yDiff) > 0) {
+        if(Math.abs(xDiff) > Math.abs(yDiff)) {
+          if(xDiff > 0) this.movePlayer(-1, 0)
+          else this.movePlayer(1, 0)
+        } 
+        else {
+          if(yDiff > 0) this.movePlayer(0, -1)
+          else this.movePlayer(0, 1)
+        }
+      }
+      console.log(pos.x + ", " + pos.y)
+
+      console.log(this.player.char.x * config.tileSize)
+    })
+  }
+
+  getMousePos(e) {
+    const rect = this.canvas.getBoundingClientRect()
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    }
   }
 
   /**
