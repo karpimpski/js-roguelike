@@ -1,13 +1,33 @@
 import config from '../config.js'
 import Tile from './Tile.js'
 
-export default class {
+/**
+ * Represents the game map.
+ */
+export default class GameMap {
   constructor(game) {
     this.game = game
     this.tiles = []
     this.characters = []
+    this.setupMap()
+  }
 
+  /**
+   * Draws all tiles and characters.
+   */
+  update() {
+    this.tiles.forEach( (column, x) => {
+      column.forEach((tile, y) => {
+        this.drawTile(tile, x, y)
+      })
+    })
+    this.characters.forEach( char => this.drawChar(char) )
+  }
 
+  /**
+   * Creates tilemap and store it in tiles field.
+   */
+  setupMap() {
     // fill in tiles top to bottom, left to right
     for (let x = 0; x < config.mapWidth; x++) {
       this.tiles.push([])
@@ -22,33 +42,35 @@ export default class {
     this.createWall(0, 0, 10, 0)
   }
 
-  
-
-  update() {
-    this.tiles.forEach( (column, x) => {
-      column.forEach((tile, y) => {
-        this.drawTile(tile, x, y)
-      })
-    })
-    this.characters.forEach( char => this.drawChar(char) )
-  }
-
+  /**
+   * Determines if a given tile can be walked on.
+   * 
+   * @param {int} x - X coordinate.
+   * @param {int} y - Y coordinate.
+   */
   passableTile(x, y) {
     if (!this.tiles[x]) return
     else if(!this.tiles[x][y]) return
     return this.tiles[x][y].passable
   }
 
+  /**
+   * Draws a tile on the map.
+   * 
+   * @param {Tile} tile - Tile object to draw.
+   * @param {int}    x  - X coordinate. 
+   * @param {int}    y  - Y coordinate.
+   */
   drawTile(tile, x, y) {
     this.game.ctx.fillStyle = tile.color
     this.game.ctx.fillRect(x * config.tileSize, y * config.tileSize, config.tileSize, config.tileSize)
   }
 
   /**
-   * Create a straight, impassable wall. Either width or height must be 0.
+   * Creates a vertical or horizontal impassable wall. Either width or height must be 0.
    * 
-   * @param {int} x initial X value
-   * @param {int} y initial Y value
+   * @param {int} x - Initial X value.
+   * @param {int} y - Initial Y value.
    */
   createWall(x, y, width, height) {
     // if width and height are both defined, return
@@ -66,6 +88,14 @@ export default class {
     }
   }
 
+  /**
+   * Creates a rectangular room.
+   * 
+   * @param {int} x      - X coordinate.
+   * @param {int} y      - Y coordinate.
+   * @param {int} width  - Room width.
+   * @param {int} height - Room height.
+   */
   createRoom(x, y, width, height) {
     // if is defined as less than 1x1, return
     if (Math.abs(width) === 0 || Math.abs(height) === 0) {
@@ -82,11 +112,21 @@ export default class {
     this.createWall(x + width + widthOffset, y, 0, height)
   }
 
+  /**
+   * Adds a map character to characters field.
+   * 
+   * @param {MapCharacter} char - Character to add.
+   */
   addChar(char) {
     this.characters.push(char)
     this.update()
   }
 
+  /**
+   * Draws a map character on map.
+   * 
+   * @param {MapCharacter} char - Character to draw.
+   */
   drawChar(char) {
     this.game.ctx.font = config.font
     this.game.ctx.fillStyle = char.color
