@@ -27,7 +27,7 @@ class Game {
   }
 
   /**
-   * Sets keyboard listeners.
+   * Sets keyboard/mouse listeners.
    */
   setListeners() {
     document.addEventListener('keydown', (e) => {
@@ -43,7 +43,8 @@ class Game {
     })
 
     document.addEventListener('mousedown', (e) => {
-      const pos = this.getMousePos(e)
+      const rect = this.canvas.getBoundingClientRect()
+      const pos = { x: e.clientX - rect.left, y: e.clientY - rect.top }
       const xDiff = this.player.char.x * config.tileSize - pos.x
       const yDiff = this.player.char.y * config.tileSize - pos.y
 
@@ -57,18 +58,7 @@ class Game {
           else this.movePlayer(0, 1)
         }
       }
-      console.log(pos.x + ", " + pos.y)
-
-      console.log(this.player.char.x * config.tileSize)
     })
-  }
-
-  getMousePos(e) {
-    const rect = this.canvas.getBoundingClientRect()
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    }
   }
 
   /**

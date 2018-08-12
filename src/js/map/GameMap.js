@@ -120,7 +120,7 @@ export default class GameMap {
    * @param {int}    y  - Y coordinate.
    */
   drawTile(tile, x, y) {
-    this.game.ctx.drawImage(tile.img, x * config.tileSize, y * config.tileSize)
+    this.game.ctx.drawImage(tile.img, x * config.tileSize, y * config.tileSize, config.tileSize, config.tileSize)
   }
 
   /**
